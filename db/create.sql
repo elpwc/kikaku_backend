@@ -1,0 +1,1 @@
+create database if not exists kikakudb default charset utf8mb4;
