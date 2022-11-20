@@ -1,50 +1,28 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { AffairType } from 'src/affair-type/entities/affair-type.entity';
+import { Affair } from 'src/affair/entities/affair.entity';
 import {
   BeforeUpdate,
   Column,
   Entity,
-  ManyToOne,
+  JoinColumn,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
-export class Affair {
+export class AffairType {
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;
 
   @Column()
   @ApiProperty()
-  name: string;
+  name: number;
 
-  @ManyToOne(() => AffairType, (type) => type.affairs)
+  @OneToMany(() => Affair, (affair) => affair.type)
+  @JoinColumn()
   @ApiProperty()
-  type: AffairType;
-
-  @Column()
-  @ApiProperty()
-  content: string;
-
-  @Column()
-  @ApiProperty()
-  deadline: Date;
-
-  @Column()
-  @ApiProperty()
-  continuePeriod_min: number;
-
-  @Column()
-  @ApiProperty()
-  times: number;
-
-  @Column()
-  @ApiProperty()
-  isImportant: boolean;
-
-  @Column()
-  @ApiProperty()
-  doAlarm: boolean;
+  affairs: Affair[];
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()

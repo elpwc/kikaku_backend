@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import { AffairType } from 'src/affair-type/entities/affair-type.entity';
 import { AppDataSource } from 'src/dataSource';
 import { Repository } from 'typeorm';
 import { CreateAffairDto } from './dto/create-affair.dto';
@@ -11,17 +12,31 @@ export class AffairService {
   constructor(
     @InjectRepository(Affair)
     private readonly affairRepository: Repository<Affair>,
+    @InjectRepository(AffairType)
+    private readonly affairTypeRepository: Repository<AffairType>,
   ) {}
 
   async create(createAffairDto: CreateAffairDto) {
-    const newItem = await this.affairRepository.save(createAffairDto);
+    const affair = new Affair();
+    affair.content = createAffairDto.content;
+    affair.continuePeriod_min = createAffairDto.continuePeriod_min;
+    affair.deadline = createAffairDto.deadline;
+    affair.doAlarm = createAffairDto.doAlarm;
+    affair.isImportant = createAffairDto.isImportant;
+    affair.name = createAffairDto.name;
+    affair.times = createAffairDto.times;
+    affair.type = await this.affairTypeRepository.findOne({
+      where: { id: createAffairDto.typeId },
+    });
+
+    const newItem = await this.affairRepository.save(affair);
 
     return newItem;
   }
 
   async findAll(query) {
     const qb = await AppDataSource.getRepository(Affair).createQueryBuilder(
-      'notes',
+      'affair',
     );
 
     qb.where('1 = 1');
