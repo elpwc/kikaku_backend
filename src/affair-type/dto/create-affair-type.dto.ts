@@ -1,1 +1,6 @@
-export class CreateAffairTypeDto {}
+import { ApiProperty } from '@nestjs/swagger';
+
+export class CreateAffairTypeDto {
+  @ApiProperty()
+  name: number;
+}
