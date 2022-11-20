@@ -9,7 +9,7 @@ import * as helmet from 'helmet';
 import * as cors from 'cors';
 import { Logger } from '@nestjs/common';
 
-const PORT = 3005;
+const PORT = 3006;
 
 async function bootstrap() {
   const app = await NestFactory.create(AppModule);
