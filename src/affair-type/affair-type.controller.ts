@@ -8,12 +8,21 @@ import {
   Delete,
   Query,
 } from '@nestjs/common';
-import { ApiOperation, ApiResponse } from '@nestjs/swagger';
+import {
+  ApiExtraModels,
+  ApiOperation,
+  ApiResponse,
+  ApiTags,
+} from '@nestjs/swagger';
+import { ResponseDto } from 'src/dto/response.dto';
 import { AffairTypeService } from './affair-type.service';
 import { CreateAffairTypeDto } from './dto/create-affair-type.dto';
 import { UpdateAffairTypeDto } from './dto/update-affair-type.dto';
+import { AffairType } from './entities/affair-type.entity';
 
 @Controller('affair-type')
+@ApiExtraModels(ResponseDto)
+@ApiTags('AffairType')
 export class AffairTypeController {
   constructor(private readonly affairTypeService: AffairTypeService) {}
 
@@ -21,6 +30,7 @@ export class AffairTypeController {
   @ApiResponse({
     status: 201,
     description: 'suc',
+    type: ResponseDto<AffairType>,
   })
   @Post()
   async create(@Body() createAffairTypeDto: CreateAffairTypeDto) {
@@ -28,7 +38,11 @@ export class AffairTypeController {
   }
 
   @ApiOperation({ summary: 'get all' })
-  @ApiResponse({ status: 200, description: 'suc' })
+  @ApiResponse({
+    status: 200,
+    description: 'suc',
+    type: ResponseDto<AffairType[]>,
+  })
   @Get()
   async findAll(@Query() query) {
     return this.affairTypeService.findAll(query);

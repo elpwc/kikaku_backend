@@ -17,7 +17,7 @@ export class AffairType {
 
   @Column()
   @ApiProperty()
-  name: number;
+  name: string;
 
   @OneToMany(() => Affair, (affair) => affair.type)
   @JoinColumn()

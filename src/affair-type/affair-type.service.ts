@@ -26,7 +26,7 @@ export class AffairTypeService {
 
     qb.where('1 = 1');
 
-    qb.orderBy('affair.created', 'DESC');
+    qb.orderBy('affairType.createtime', 'DESC');
 
     const count = await qb.getCount();
 

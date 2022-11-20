@@ -8,6 +8,8 @@ import {
 import * as helmet from 'helmet';
 import * as cors from 'cors';
 import { Logger } from '@nestjs/common';
+import { TransformInterceptor } from './interceptor/transform.interceptor';
+import { HttpExceptionFilter } from './filters/http-exception.filter';
 
 const PORT = 3006;
 
@@ -55,6 +57,9 @@ async function bootstrap() {
       allowedHeaders: ['Content-Type'],
     }),
   );
+
+  app.useGlobalInterceptors(new TransformInterceptor());
+  app.useGlobalFilters(new HttpExceptionFilter());
 
   await app.listen(PORT, () => {
     Logger.log('start');

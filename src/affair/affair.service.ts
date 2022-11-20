@@ -1,4 +1,4 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AffairType } from 'src/affair-type/entities/affair-type.entity';
 import { AppDataSource } from 'src/dataSource';
@@ -49,7 +49,7 @@ export class AffairService {
       qb.andWhere('affair.isImportant = :id', { id: query.isImportant });
     }
 
-    qb.orderBy('affair.created', 'DESC');
+    qb.orderBy('affair.createtime', 'DESC');
 
     const count = await qb.getCount();
 
@@ -67,7 +67,13 @@ export class AffairService {
   }
 
   async findOne(id: number) {
-    return this.affairRepository.findOne({ where: { id } });
+    const res = await this.affairRepository.findOne({ where: { id } });
+    console.log(res);
+    if (res === null) {
+      throw new NotFoundException('Cannot find');
+    } else {
+      return res;
+    }
   }
 
   async update(id: number, updateAffairDto: UpdateAffairDto) {

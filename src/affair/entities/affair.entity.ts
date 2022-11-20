@@ -19,7 +19,7 @@ export class Affair {
   name: string;
 
   @ManyToOne(() => AffairType, (type) => type.affairs)
-  @ApiProperty()
+  @ApiProperty({ type: () => AffairType })
   type: AffairType;
 
   @Column()
