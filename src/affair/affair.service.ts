@@ -61,13 +61,18 @@ export class AffairService {
       qb.offset(query.offset);
     }
 
-    const affairs = await qb.getMany();
+    const affairs = await qb.leftJoinAndSelect('affair.type', 'type').getMany();
+
+    console.log(affairs);
 
     return { affairs, count };
   }
 
   async findOne(id: number) {
-    const res = await this.affairRepository.findOne({ where: { id } });
+    const res = await this.affairRepository.findOne({
+      where: { id },
+      relations: ['type'],
+    });
     console.log(res);
     if (res === null) {
       throw new NotFoundException('Cannot find');
