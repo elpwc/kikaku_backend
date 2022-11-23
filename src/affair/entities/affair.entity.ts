@@ -1,10 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AffairType } from 'src/affair-type/entities/affair-type.entity';
+import { YearRecord } from 'src/year-record/entities/year-record.entity';
 import {
   BeforeUpdate,
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
@@ -28,7 +31,7 @@ export class Affair {
 
   @Column()
   @ApiProperty()
-  deadline: Date;
+  deadline?: Date;
 
   @Column()
   @ApiProperty()
@@ -45,6 +48,28 @@ export class Affair {
   @Column()
   @ApiProperty()
   doAlarm: boolean;
+
+  @OneToMany(() => YearRecord, (year) => year.affair)
+  @JoinColumn()
+  @ApiProperty()
+  yearRecord: YearRecord[];
+
+  /*
+  @OneToMany(() => Affair, (affair) => affair.type)
+  @JoinColumn()
+  @ApiProperty()
+  affairs: Affair[];
+  
+  @OneToMany(() => Affair, (affair) => affair.type)
+  @JoinColumn()
+  @ApiProperty()
+  affairs: Affair[];
+  
+  @OneToMany(() => Affair, (affair) => affair.type)
+  @JoinColumn()
+  @ApiProperty()
+  affairs: Affair[];
+*/
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()

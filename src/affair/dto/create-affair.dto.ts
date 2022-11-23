@@ -11,7 +11,7 @@ export class CreateAffairDto {
 
   /** 死线 */
   @ApiProperty()
-  deadline: Date;
+  deadline?: Date;
   /** 一次的持续时间 */
   @ApiProperty()
   continuePeriod_min: number;
