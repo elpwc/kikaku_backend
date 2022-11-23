@@ -29,9 +29,9 @@ export class Affair {
   @ApiProperty()
   content: string;
 
-  @Column()
+  @Column({ nullable: true })
   @ApiProperty()
-  deadline?: Date;
+  deadline?: Date | null;
 
   @Column()
   @ApiProperty()
