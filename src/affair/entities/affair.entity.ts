@@ -66,13 +66,14 @@ export class Affair {
   @ApiProperty()
   weekRecord: WeekRecord[];
 
-  @Column({ nullable: true })
-  @ApiProperty({ nullable: true })
-  deleted: boolean;
   // @OneToMany(() => Affair, (affair) => affair.type)
   // @JoinColumn()
   // @ApiProperty()
   // affairs: [];
+
+  @Column({ nullable: true })
+  @ApiProperty({ nullable: true })
+  deleted: boolean;
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()

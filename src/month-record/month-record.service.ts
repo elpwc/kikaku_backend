@@ -38,11 +38,11 @@ export class MonthRecordService {
     qb.where('1 = 1');
 
     if ('year' in query) {
-      qb.andWhere('month_record.year = :id', { id: query.year });
+      qb.andWhere('month_record.year = :year', { year: query.year });
     }
 
     if ('month' in query) {
-      qb.andWhere('month_record.month = :id', { id: query.month });
+      qb.andWhere('month_record.month = :month', { month: query.month });
     }
 
     if ('affairId' in query) {

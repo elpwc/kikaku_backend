@@ -39,15 +39,15 @@ export class WeekRecordService {
     qb.where('1 = 1');
 
     if ('year' in query) {
-      qb.andWhere('week_record.year = :id', { id: query.year });
+      qb.andWhere('week_record.year = :year', { year: query.year });
     }
 
     if ('month' in query) {
-      qb.andWhere('week_record.month = :id', { id: query.month });
+      qb.andWhere('week_record.month = :month', { month: query.month });
     }
 
     if ('week' in query) {
-      qb.andWhere('week_record.week = :id', { id: query.week });
+      qb.andWhere('week_record.week = :week', { week: query.week });
     }
 
     if ('affairId' in query) {

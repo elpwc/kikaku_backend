@@ -42,11 +42,13 @@ export class AffairService {
     qb.where('1 = 1');
 
     if ('type' in query) {
-      qb.andWhere('affair.name = :id', { id: query.affair });
+      qb.andWhere('affair.name = :name', { name: query.affair });
     }
 
     if ('is_important' in query) {
-      qb.andWhere('affair.isImportant = :id', { id: query.isImportant });
+      qb.andWhere('affair.isImportant = :isImportant', {
+        isImportant: query.isImportant,
+      });
     }
 
     qb.orderBy('affair.createtime', 'DESC');
