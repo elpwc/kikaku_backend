@@ -32,7 +32,7 @@ export class Affair {
   content: string;
 
   @Column({ nullable: true })
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   deadline?: Date | null;
 
   @Column()
@@ -66,6 +66,9 @@ export class Affair {
   @ApiProperty()
   weekRecord: WeekRecord[];
 
+  @Column({ nullable: true })
+  @ApiProperty({ nullable: true })
+  deleted: boolean;
   // @OneToMany(() => Affair, (affair) => affair.type)
   // @JoinColumn()
   // @ApiProperty()

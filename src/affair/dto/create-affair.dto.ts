@@ -10,7 +10,7 @@ export class CreateAffairDto {
   content: string;
 
   /** 死线 */
-  @ApiProperty()
+  @ApiProperty({ nullable: true })
   deadline?: Date;
   /** 一次的持续时间 */
   @ApiProperty()
@@ -25,4 +25,6 @@ export class CreateAffairDto {
   /** 提醒 */
   @ApiProperty()
   doAlarm: boolean;
+  @ApiProperty({ nullable: true })
+  deleted: boolean;
 }

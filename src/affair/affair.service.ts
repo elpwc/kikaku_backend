@@ -86,6 +86,7 @@ export class AffairService {
   }
 
   async remove(id: number) {
-    return this.affairRepository.delete(id);
+    this.update(id, { deleted: true });
+    //return this.affairRepository.delete(id);
   }
 }
