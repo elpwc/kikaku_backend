@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordExtend } from 'src/record-extend/record.extend.entity';
+import { RecordExtend } from 'src/dto/record-extend/record.extend.entity';
 import { Column, Entity } from 'typeorm';
 
 @Entity()

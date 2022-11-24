@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { RecordExtendDto } from 'src/record-extend/record.extend.dto';
+import { RecordExtendDto } from 'src/dto/record-extend/record.extend.dto';
 
 export class CreateMonthRecordDto extends RecordExtendDto {
   @ApiProperty()

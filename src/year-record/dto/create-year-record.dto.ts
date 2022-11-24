@@ -1,3 +1,3 @@
-import { RecordExtendDto } from 'src/record-extend/record.extend.dto';
+import { RecordExtendDto } from 'src/dto/record-extend/record.extend.dto';
 
 export class CreateYearRecordDto extends RecordExtendDto {}

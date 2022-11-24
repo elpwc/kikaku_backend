@@ -1,5 +1,7 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AffairType } from 'src/affair-type/entities/affair-type.entity';
+import { MonthRecord } from 'src/month-record/entities/month-record.entity';
+import { WeekRecord } from 'src/week-record/entities/week-record.entity';
 import { YearRecord } from 'src/year-record/entities/year-record.entity';
 import {
   BeforeUpdate,
@@ -54,22 +56,20 @@ export class Affair {
   @ApiProperty()
   yearRecord: YearRecord[];
 
-  /*
-  @OneToMany(() => Affair, (affair) => affair.type)
+  @OneToMany(() => MonthRecord, (month) => month.affair)
   @JoinColumn()
   @ApiProperty()
-  affairs: Affair[];
-  
-  @OneToMany(() => Affair, (affair) => affair.type)
+  monthRecord: MonthRecord[];
+
+  @OneToMany(() => WeekRecord, (week) => week.affair)
   @JoinColumn()
   @ApiProperty()
-  affairs: Affair[];
-  
-  @OneToMany(() => Affair, (affair) => affair.type)
-  @JoinColumn()
-  @ApiProperty()
-  affairs: Affair[];
-*/
+  weekRecord: WeekRecord[];
+
+  // @OneToMany(() => Affair, (affair) => affair.type)
+  // @JoinColumn()
+  // @ApiProperty()
+  // affairs: [];
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()

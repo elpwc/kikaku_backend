@@ -1,4 +1,4 @@
-import { RecordExtend } from 'src/record-extend/record.extend.entity';
+import { RecordExtend } from 'src/dto/record-extend/record.extend.entity';
 import { Entity } from 'typeorm';
 
 @Entity()
