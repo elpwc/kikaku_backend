@@ -1,9 +1,3 @@
-import { ApiProperty } from '@nestjs/swagger';
+import { RecordExtendDto } from 'src/record-extend/record.extend.dto';
 
-export class CreateYearRecordDto {
-  @ApiProperty()
-  year: number;
-
-  @ApiProperty()
-  affairId: number;
-}
+export class CreateYearRecordDto extends RecordExtendDto {}
