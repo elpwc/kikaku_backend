@@ -8,6 +8,7 @@ import { AffairTypeModule } from './affair-type/affair-type.module';
 import { YearRecordModule } from './year-record/year-record.module';
 import { MonthRecordModule } from './month-record/month-record.module';
 import { WeekRecordModule } from './week-record/week-record.module';
+import { DayRecordModule } from './day-record/day-record.module';
 
 @Module({
   imports: [
@@ -17,6 +18,7 @@ import { WeekRecordModule } from './week-record/week-record.module';
     YearRecordModule,
     MonthRecordModule,
     WeekRecordModule,
+    DayRecordModule,
   ],
   controllers: [AppController],
   providers: [AppService],
