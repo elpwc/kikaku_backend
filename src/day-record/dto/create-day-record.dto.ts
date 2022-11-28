@@ -7,10 +7,8 @@ export class CreateDayRecordDto extends CreateWeekRecordDto {
   day: number;
 
   @ApiProperty()
-  /** 0-6 */
-  startTime: Date;
+  startTime: number;
 
   @ApiProperty()
-  /** 0-6 */
-  endTime: Date;
+  endTime: number;
 }

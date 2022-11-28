@@ -11,11 +11,9 @@ export class DayRecord extends WeekRecord {
 
   @Column()
   @ApiProperty()
-  /** 0-6 */
-  startTime: Date;
+  startTime: number;
 
   @Column()
   @ApiProperty()
-  /** 0-6 */
-  endTime: Date;
+  endTime: number;
 }
