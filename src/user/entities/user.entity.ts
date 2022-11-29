@@ -1,8 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { AffairType } from 'src/affair-type/entities/affair-type.entity';
+import { Affair } from 'src/affair/entities/affair.entity';
 import { DayRecord } from 'src/day-record/entities/day-record.entity';
 import { MonthRecord } from 'src/month-record/entities/month-record.entity';
-import { User } from 'src/user/entities/user.entity';
 import { WeekRecord } from 'src/week-record/entities/week-record.entity';
 import { YearRecord } from 'src/year-record/entities/year-record.entity';
 import {
@@ -10,13 +10,12 @@ import {
   Column,
   Entity,
   JoinColumn,
-  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
 
 @Entity()
-export class Affair {
+export class User {
   @PrimaryGeneratedColumn()
   @ApiProperty()
   id: number;
@@ -25,61 +24,39 @@ export class Affair {
   @ApiProperty()
   name: string;
 
-  @ManyToOne(() => AffairType, (type) => type.affairs)
-  @ApiProperty({ type: () => AffairType })
-  type: AffairType;
-
   @Column()
   @ApiProperty()
-  content: string;
+  password: string;
 
-  @Column({ nullable: true })
-  @ApiProperty({ nullable: true })
-  deadline?: Date | null;
-
-  @Column()
+  @OneToMany(() => Affair, (type) => type.user)
+  @JoinColumn()
   @ApiProperty()
-  continuePeriod_min: number;
+  affairs: Affair[];
 
-  @Column()
+  @OneToMany(() => Affair, (type) => type.user)
+  @JoinColumn()
   @ApiProperty()
-  times: number;
+  affairTypes: AffairType[];
 
-  @Column()
-  @ApiProperty()
-  isImportant: boolean;
-
-  @Column()
-  @ApiProperty()
-  doAlarm: boolean;
-
-  @OneToMany(() => YearRecord, (year) => year.affair)
+  @OneToMany(() => YearRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
   yearRecord: YearRecord[];
 
-  @OneToMany(() => MonthRecord, (month) => month.affair)
+  @OneToMany(() => MonthRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
   monthRecord: MonthRecord[];
 
-  @OneToMany(() => WeekRecord, (week) => week.affair)
+  @OneToMany(() => WeekRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
   weekRecord: WeekRecord[];
 
-  @OneToMany(() => DayRecord, (day) => day.affair)
+  @OneToMany(() => DayRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
   dayRecord: DayRecord[];
-
-  @ManyToOne(() => User, (user) => user.affairs)
-  @ApiProperty({ type: () => User })
-  user: User;
-
-  @Column({ nullable: true })
-  @ApiProperty({ nullable: true })
-  deleted: boolean;
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()

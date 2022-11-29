@@ -1,12 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { Affair } from 'src/affair/entities/affair.entity';
-import {
-  BeforeUpdate,
-  Column,
-  Entity,
-  ManyToOne,
-  PrimaryGeneratedColumn,
-} from 'typeorm';
+import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
 @Entity()
 export class RecordExtend {
@@ -17,10 +10,6 @@ export class RecordExtend {
   @Column()
   @ApiProperty()
   year: number;
-
-  @ManyToOne(() => Affair, (affair) => affair.yearRecord)
-  @ApiProperty({ type: () => Affair })
-  affair: Affair;
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()

@@ -1,6 +1,8 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Affair } from 'src/affair/entities/affair.entity';
+import { User } from 'src/user/entities/user.entity';
 import { WeekRecord } from 'src/week-record/entities/week-record.entity';
-import { Column, Entity } from 'typeorm';
+import { Column, Entity, ManyToOne } from 'typeorm';
 
 @Entity()
 export class DayRecord extends WeekRecord {
@@ -16,4 +18,12 @@ export class DayRecord extends WeekRecord {
   @Column()
   @ApiProperty()
   endTime: number;
+
+  @ManyToOne(() => Affair, (affair) => affair.dayRecord)
+  @ApiProperty({ type: () => Affair })
+  affair: Affair;
+
+  @ManyToOne(() => User, (user) => user.dayRecord)
+  @ApiProperty({ type: () => User })
+  user: User;
 }

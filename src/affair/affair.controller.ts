@@ -48,17 +48,20 @@ export class AffairController {
   @ApiResponse({ status: 200, description: 'suc', type: ResponseDto<Affair> })
   @ApiResponse({ status: 404, description: 'not find', type: ResponseDto })
   @Get(':id')
-  findOne(@Param('id') id: string) {
+  async findOne(@Param('id') id: string) {
     return this.affairService.findOne(+id);
   }
 
   @Patch(':id')
-  update(@Param('id') id: string, @Body() updateAffairDto: UpdateAffairDto) {
+  async update(
+    @Param('id') id: string,
+    @Body() updateAffairDto: UpdateAffairDto,
+  ) {
     return this.affairService.update(+id, updateAffairDto);
   }
 
   @Delete(':id')
-  remove(@Param('id') id: string) {
+  async remove(@Param('id') id: string) {
     return this.affairService.remove(+id);
   }
 }

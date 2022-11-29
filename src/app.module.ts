@@ -9,6 +9,7 @@ import { YearRecordModule } from './year-record/year-record.module';
 import { MonthRecordModule } from './month-record/month-record.module';
 import { WeekRecordModule } from './week-record/week-record.module';
 import { DayRecordModule } from './day-record/day-record.module';
+import { UserModule } from './user/user.module';
 
 @Module({
   imports: [
@@ -19,6 +20,7 @@ import { DayRecordModule } from './day-record/day-record.module';
     MonthRecordModule,
     WeekRecordModule,
     DayRecordModule,
+    UserModule,
   ],
   controllers: [AppController],
   providers: [AppService],

@@ -1,10 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { Affair } from 'src/affair/entities/affair.entity';
+import { User } from 'src/user/entities/user.entity';
 import {
   BeforeUpdate,
   Column,
   Entity,
   JoinColumn,
+  ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
@@ -23,6 +25,10 @@ export class AffairType {
   @JoinColumn()
   @ApiProperty()
   affairs: Affair[];
+
+  @ManyToOne(() => User, (user) => user.affairTypes)
+  @ApiProperty({ type: () => User })
+  user: User;
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()
