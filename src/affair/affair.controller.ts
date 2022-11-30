@@ -15,6 +15,7 @@ import {
   ApiTags,
 } from '@nestjs/swagger';
 import { ResponseDto } from 'src/dto/response.dto';
+import { UserDec } from 'src/user/user.decorator';
 import { AffairService } from './affair.service';
 import { CreateAffairDto } from './dto/create-affair.dto';
 import { UpdateAffairDto } from './dto/update-affair.dto';
@@ -33,15 +34,18 @@ export class AffairController {
     type: ResponseDto<Affair>,
   })
   @Post()
-  async create(@Body() createAffairDto: CreateAffairDto) {
-    return this.affairService.create(createAffairDto);
+  async create(
+    @UserDec('id') userId: number,
+    @Body() createAffairDto: CreateAffairDto,
+  ) {
+    return this.affairService.create(userId, createAffairDto);
   }
 
   @ApiOperation({ summary: 'get all' })
   @ApiResponse({ status: 200, description: 'suc', type: ResponseDto<Affair[]> })
   @Get()
-  async findAll(@Query() query) {
-    return this.affairService.findAll(query);
+  async findAll(@UserDec('id') userId: number, @Query() query) {
+    return this.affairService.findAllByUserId(userId, query);
   }
 
   @ApiOperation({ summary: 'get one by id' })

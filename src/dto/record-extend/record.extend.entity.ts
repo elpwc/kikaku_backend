@@ -1,7 +1,6 @@
 import { ApiProperty } from '@nestjs/swagger';
 import { BeforeUpdate, Column, Entity, PrimaryGeneratedColumn } from 'typeorm';
 
-@Entity()
 export class RecordExtend {
   @PrimaryGeneratedColumn()
   @ApiProperty()

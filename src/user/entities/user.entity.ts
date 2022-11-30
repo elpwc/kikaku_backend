@@ -6,6 +6,7 @@ import { MonthRecord } from 'src/month-record/entities/month-record.entity';
 import { WeekRecord } from 'src/week-record/entities/week-record.entity';
 import { YearRecord } from 'src/year-record/entities/year-record.entity';
 import {
+  BeforeInsert,
   BeforeUpdate,
   Column,
   Entity,
@@ -13,6 +14,8 @@ import {
   OneToMany,
   PrimaryGeneratedColumn,
 } from 'typeorm';
+import * as argon2 from 'argon2';
+import { IsEmail } from 'class-validator';
 
 @Entity()
 export class User {
@@ -27,6 +30,11 @@ export class User {
   @Column()
   @ApiProperty()
   password: string;
+
+  @BeforeInsert()
+  async hashPassword() {
+    this.password = await argon2.hash(this.password);
+  }
 
   @OneToMany(() => Affair, (type) => type.user)
   @JoinColumn()

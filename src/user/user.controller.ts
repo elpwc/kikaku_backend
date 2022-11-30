@@ -7,6 +7,7 @@ import {
   Param,
   Delete,
   Query,
+  HttpException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -19,6 +20,8 @@ import {
   ApiResponse,
 } from '@nestjs/swagger';
 import { ResponseDto } from 'src/dto/response.dto';
+import { LoginDto } from './dto/login.dto';
+import { UserDec } from './user.decorator';
 
 @Controller('user')
 @ApiExtraModels(ResponseDto)
@@ -37,6 +40,19 @@ export class UserController {
     return this.userService.create(createUserDto);
   }
 
+  @Post('/login')
+  async login(@Body() loginParams: LoginDto) {
+    const _user = await this.userService.findOne(loginParams);
+
+    const errors = { User: ' not found' };
+    if (!_user) throw new HttpException({ errors }, 401);
+
+    const token = await this.userService.generateJWT(_user);
+    const { name } = _user;
+    const user = { name, token };
+    return { user };
+  }
+
   @ApiOperation({ summary: 'get all' })
   @ApiResponse({ status: 200, description: 'suc', type: ResponseDto<User[]> })
   @Get()
@@ -47,13 +63,16 @@ export class UserController {
   @ApiOperation({ summary: 'get one by id' })
   @ApiResponse({ status: 200, description: 'suc', type: ResponseDto<User> })
   @ApiResponse({ status: 404, description: 'not find', type: ResponseDto })
-  @Get(':id')
-  async findOne(@Param('id') id: string) {
-    return this.userService.findOne(+id);
+  @Get(':name')
+  async findByName(@Param('name') name: string) {
+    return this.userService.findByName(name);
   }
 
   @Patch(':id')
-  async update(@Param('id') id: string, @Body() updateUserDto: UpdateUserDto) {
+  async update(
+    @UserDec('id') id: string,
+    @Body() updateUserDto: UpdateUserDto,
+  ) {
     return this.userService.update(+id, updateUserDto);
   }
 

@@ -2,6 +2,7 @@ import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AffairType } from 'src/affair-type/entities/affair-type.entity';
 import { AppDataSource } from 'src/dataSource';
+import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateAffairDto } from './dto/create-affair.dto';
 import { UpdateAffairDto } from './dto/update-affair.dto';
@@ -14,9 +15,11 @@ export class AffairService {
     private readonly affairRepository: Repository<Affair>,
     @InjectRepository(AffairType)
     private readonly affairTypeRepository: Repository<AffairType>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createAffairDto: CreateAffairDto) {
+  async create(userId: number, createAffairDto: CreateAffairDto) {
     const affair = new Affair();
     affair.content = createAffairDto.content;
     affair.continuePeriod_min = createAffairDto.continuePeriod_min;
@@ -31,6 +34,14 @@ export class AffairService {
 
     const newItem = await this.affairRepository.save(affair);
 
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['affairs'],
+    });
+    user.affairs.push(affair);
+
+    await this.userRepository.save(user);
+
     return newItem;
   }
 
@@ -40,6 +51,43 @@ export class AffairService {
     );
 
     qb.where('1 = 1');
+
+    if ('type' in query) {
+      qb.andWhere('affair.name = :name', { name: query.affair });
+    }
+
+    if ('is_important' in query) {
+      qb.andWhere('affair.isImportant = :isImportant', {
+        isImportant: query.isImportant,
+      });
+    }
+
+    qb.orderBy('affair.createtime', 'DESC');
+
+    const count = await qb.getCount();
+
+    if ('limit' in query) {
+      qb.limit(query.limit);
+    }
+
+    if ('offset' in query) {
+      qb.offset(query.offset);
+    }
+
+    const affairs = await qb.leftJoinAndSelect('affair.type', 'type').getMany();
+
+    console.log(affairs);
+
+    return { affairs, count };
+  }
+
+  async findAllByUserId(userId: number, query) {
+    const qb = await AppDataSource.getRepository(Affair).createQueryBuilder(
+      'affair',
+    );
+
+    qb.where('1 = 1');
+    qb.andWhere('affair.userId = :userId', { userId });
 
     if ('type' in query) {
       qb.andWhere('affair.name = :name', { name: query.affair });
