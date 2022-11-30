@@ -14,6 +14,7 @@ import { UpdateMonthRecordDto } from './dto/update-month-record.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { MonthRecord } from './entities/month-record.entity';
 import { ResponseDto } from 'src/dto/response.dto';
+import { UserDec } from 'src/user/user.decorator';
 
 @Controller('month-record')
 @ApiTags('MonthRecord')
@@ -27,8 +28,11 @@ export class MonthRecordController {
     type: ResponseDto<MonthRecord>,
   })
   @Post()
-  async create(@Body() createMonthRecordDto: CreateMonthRecordDto) {
-    return this.monthRecordService.create(createMonthRecordDto);
+  async create(
+    @UserDec('id') userId: number,
+    @Body() createMonthRecordDto: CreateMonthRecordDto,
+  ) {
+    return this.monthRecordService.create(userId, createMonthRecordDto);
   }
 
   @ApiOperation({ summary: 'get all' })
@@ -38,8 +42,8 @@ export class MonthRecordController {
     type: ResponseDto<MonthRecord[]>,
   })
   @Get()
-  async findAll(@Query() query) {
-    return this.monthRecordService.findAll(query);
+  async findAll(@UserDec('id') userId: number, @Query() query) {
+    return this.monthRecordService.findAll(query, userId);
   }
 
   @Get(':id')

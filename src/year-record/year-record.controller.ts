@@ -14,6 +14,7 @@ import { UpdateYearRecordDto } from './dto/update-year-record.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { YearRecord } from './entities/year-record.entity';
 import { ResponseDto } from 'src/dto/response.dto';
+import { UserDec } from 'src/user/user.decorator';
 
 @Controller('year-record')
 @ApiTags('YearRecord')
@@ -27,8 +28,11 @@ export class YearRecordController {
     type: ResponseDto<YearRecord>,
   })
   @Post()
-  async create(@Body() createYearRecordDto: CreateYearRecordDto) {
-    return this.yearRecordService.create(createYearRecordDto);
+  async create(
+    @UserDec('id') userId: number,
+    @Body() createYearRecordDto: CreateYearRecordDto,
+  ) {
+    return this.yearRecordService.create(userId, createYearRecordDto);
   }
 
   @ApiOperation({ summary: 'get all' })
@@ -38,8 +42,8 @@ export class YearRecordController {
     type: ResponseDto<YearRecord[]>,
   })
   @Get()
-  async findAll(@Query() query) {
-    return this.yearRecordService.findAll(query);
+  async findAll(@UserDec('id') userId: number, @Query() query) {
+    return this.yearRecordService.findAllByUserId(userId, query);
   }
 
   @Get(':id')

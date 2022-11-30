@@ -45,49 +45,15 @@ export class AffairService {
     return newItem;
   }
 
-  async findAll(query) {
+  async findAll(query, userId?: number) {
     const qb = await AppDataSource.getRepository(Affair).createQueryBuilder(
       'affair',
     );
 
     qb.where('1 = 1');
-
-    if ('type' in query) {
-      qb.andWhere('affair.name = :name', { name: query.affair });
+    if (userId) {
+      qb.andWhere('affair.userId = :userId', { userId });
     }
-
-    if ('is_important' in query) {
-      qb.andWhere('affair.isImportant = :isImportant', {
-        isImportant: query.isImportant,
-      });
-    }
-
-    qb.orderBy('affair.createtime', 'DESC');
-
-    const count = await qb.getCount();
-
-    if ('limit' in query) {
-      qb.limit(query.limit);
-    }
-
-    if ('offset' in query) {
-      qb.offset(query.offset);
-    }
-
-    const affairs = await qb.leftJoinAndSelect('affair.type', 'type').getMany();
-
-    console.log(affairs);
-
-    return { affairs, count };
-  }
-
-  async findAllByUserId(userId: number, query) {
-    const qb = await AppDataSource.getRepository(Affair).createQueryBuilder(
-      'affair',
-    );
-
-    qb.where('1 = 1');
-    qb.andWhere('affair.userId = :userId', { userId });
 
     if ('type' in query) {
       qb.andWhere('affair.name = :name', { name: query.affair });

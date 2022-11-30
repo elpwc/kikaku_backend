@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Affair } from 'src/affair/entities/affair.entity';
 import { AppDataSource } from 'src/dataSource';
+import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateMonthRecordDto } from './dto/create-month-record.dto';
 import { UpdateMonthRecordDto } from './dto/update-month-record.dto';
@@ -15,9 +16,11 @@ export class MonthRecordService {
 
     @InjectRepository(Affair)
     private readonly affairRepository: Repository<Affair>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createMonthRecordDto: CreateMonthRecordDto) {
+  async create(userId: number, createMonthRecordDto: CreateMonthRecordDto) {
     const record = new MonthRecord();
     record.year = createMonthRecordDto.year;
     record.month = createMonthRecordDto.month;
@@ -27,15 +30,26 @@ export class MonthRecordService {
 
     const newItem = await this.monthRecordRepository.save(record);
 
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['monthRecords'],
+    });
+    user.monthRecords.push(record);
+
+    await this.userRepository.save(user);
+
     return newItem;
   }
 
-  async findAll(query) {
+  async findAll(query, userId?: number) {
     const qb = await AppDataSource.getRepository(
       MonthRecord,
     ).createQueryBuilder('month_record');
 
     qb.where('1 = 1');
+    if (userId) {
+      qb.andWhere('affair.userId = :userId', { userId });
+    }
 
     if ('year' in query) {
       qb.andWhere('month_record.year = :year', { year: query.year });

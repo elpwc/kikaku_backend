@@ -45,7 +45,7 @@ export class AffairController {
   @ApiResponse({ status: 200, description: 'suc', type: ResponseDto<Affair[]> })
   @Get()
   async findAll(@UserDec('id') userId: number, @Query() query) {
-    return this.affairService.findAllByUserId(userId, query);
+    return this.affairService.findAll(query, userId);
   }
 
   @ApiOperation({ summary: 'get one by id' })

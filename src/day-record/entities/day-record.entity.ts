@@ -23,7 +23,7 @@ export class DayRecord extends WeekRecord {
   @ApiProperty({ type: () => Affair })
   affair: Affair;
 
-  @ManyToOne(() => User, (user) => user.dayRecord)
+  @ManyToOne(() => User, (user) => user.dayRecords)
   @ApiProperty({ type: () => User })
   user: User;
 }

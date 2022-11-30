@@ -10,7 +10,7 @@ export class YearRecord extends RecordExtend {
   @ApiProperty({ type: () => Affair })
   affair: Affair;
 
-  @ManyToOne(() => User, (user) => user.yearRecord)
+  @ManyToOne(() => User, (user) => user.yearRecords)
   @ApiProperty({ type: () => User })
   user: User;
 }

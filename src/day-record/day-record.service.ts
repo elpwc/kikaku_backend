@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Affair } from 'src/affair/entities/affair.entity';
 import { AppDataSource } from 'src/dataSource';
+import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateDayRecordDto } from './dto/create-day-record.dto';
 import { UpdateDayRecordDto } from './dto/update-day-record.dto';
@@ -15,9 +16,11 @@ export class DayRecordService {
 
     @InjectRepository(Affair)
     private readonly affairRepository: Repository<Affair>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createDayRecordDto: CreateDayRecordDto) {
+  async create(userId: number, createDayRecordDto: CreateDayRecordDto) {
     const record = new DayRecord();
     record.year = createDayRecordDto.year;
     record.month = createDayRecordDto.month;
@@ -31,15 +34,26 @@ export class DayRecordService {
 
     const newItem = await this.dayRecordRepository.save(record);
 
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['dayRecords'],
+    });
+    user.dayRecords.push(record);
+
+    await this.userRepository.save(user);
+
     return newItem;
   }
 
-  async findAll(query) {
+  async findAll(query, userId?: number) {
     const qb = await AppDataSource.getRepository(DayRecord).createQueryBuilder(
       'day_record',
     );
 
     qb.where('1 = 1');
+    if (userId) {
+      qb.andWhere('affair.userId = :userId', { userId });
+    }
 
     if ('year' in query) {
       qb.andWhere('day_record.year = :year', { year: query.year });

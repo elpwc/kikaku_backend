@@ -14,7 +14,7 @@ export class MonthRecord extends RecordExtend {
   @ApiProperty({ type: () => Affair })
   affair: Affair;
 
-  @ManyToOne(() => User, (user) => user.monthRecord)
+  @ManyToOne(() => User, (user) => user.monthRecords)
   @ApiProperty({ type: () => User })
   user: User;
 }

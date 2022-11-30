@@ -2,6 +2,7 @@ import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { Affair } from 'src/affair/entities/affair.entity';
 import { AppDataSource } from 'src/dataSource';
+import { User } from 'src/user/entities/user.entity';
 import { Repository } from 'typeorm';
 import { CreateWeekRecordDto } from './dto/create-week-record.dto';
 import { UpdateWeekRecordDto } from './dto/update-week-record.dto';
@@ -15,9 +16,11 @@ export class WeekRecordService {
 
     @InjectRepository(Affair)
     private readonly affairRepository: Repository<Affair>,
+    @InjectRepository(User)
+    private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createWeekRecordDto: CreateWeekRecordDto) {
+  async create(userId: number, createWeekRecordDto: CreateWeekRecordDto) {
     const record = new WeekRecord();
     record.year = createWeekRecordDto.year;
     record.month = createWeekRecordDto.month;
@@ -28,15 +31,26 @@ export class WeekRecordService {
 
     const newItem = await this.weekRecordRepository.save(record);
 
+    const user = await this.userRepository.findOne({
+      where: { id: userId },
+      relations: ['weekRecords'],
+    });
+    user.weekRecords.push(record);
+
+    await this.userRepository.save(user);
+
     return newItem;
   }
 
-  async findAll(query) {
+  async findAll(query, userId?: number) {
     const qb = await AppDataSource.getRepository(WeekRecord).createQueryBuilder(
       'week_record',
     );
 
     qb.where('1 = 1');
+    if (userId) {
+      qb.andWhere('affair.userId = :userId', { userId });
+    }
 
     if ('year' in query) {
       qb.andWhere('week_record.year = :year', { year: query.year });

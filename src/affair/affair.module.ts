@@ -20,13 +20,14 @@ import { User } from 'src/user/entities/user.entity';
 })
 export class AffairModule implements NestModule {
   public configure(consumer: MiddlewareConsumer) {
+    const rootPath = 'affair';
     consumer
       .apply(AuthMiddleware)
       .forRoutes(
-        { path: 'affair', method: RequestMethod.GET },
-        { path: 'affair', method: RequestMethod.POST },
-        { path: 'affair/:id', method: RequestMethod.PATCH },
-        { path: 'affair/:id', method: RequestMethod.DELETE },
+        { path: rootPath, method: RequestMethod.GET },
+        { path: rootPath, method: RequestMethod.POST },
+        { path: rootPath + '/:id', method: RequestMethod.PATCH },
+        { path: rootPath + '/:id', method: RequestMethod.DELETE },
       );
   }
 }

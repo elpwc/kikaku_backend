@@ -14,6 +14,7 @@ import { UpdateWeekRecordDto } from './dto/update-week-record.dto';
 import { ApiOperation, ApiResponse, ApiTags } from '@nestjs/swagger';
 import { WeekRecord } from './entities/week-record.entity';
 import { ResponseDto } from 'src/dto/response.dto';
+import { UserDec } from 'src/user/user.decorator';
 
 @Controller('week-record')
 @ApiTags('WeekRecord')
@@ -27,8 +28,11 @@ export class WeekRecordController {
     type: ResponseDto<WeekRecord>,
   })
   @Post()
-  async create(@Body() createWeekRecordDto: CreateWeekRecordDto) {
-    return this.weekRecordService.create(createWeekRecordDto);
+  async create(
+    @UserDec('id') userId: number,
+    @Body() createWeekRecordDto: CreateWeekRecordDto,
+  ) {
+    return this.weekRecordService.create(userId, createWeekRecordDto);
   }
 
   @ApiOperation({ summary: 'get all' })
@@ -38,8 +42,8 @@ export class WeekRecordController {
     type: ResponseDto<WeekRecord[]>,
   })
   @Get()
-  async findAll(@Query() query) {
-    return this.weekRecordService.findAll(query);
+  async findAll(@UserDec('id') userId: number, @Query() query) {
+    return this.weekRecordService.findAll(query, userId);
   }
 
   @Get(':id')

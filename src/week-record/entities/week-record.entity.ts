@@ -14,7 +14,7 @@ export class WeekRecord extends MonthRecord {
   @ApiProperty({ type: () => Affair })
   affair: Affair;
 
-  @ManyToOne(() => User, (user) => user.weekRecord)
+  @ManyToOne(() => User, (user) => user.weekRecords)
   @ApiProperty({ type: () => User })
   user: User;
 }

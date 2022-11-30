@@ -10,6 +10,7 @@ import {
 } from '@nestjs/common';
 import { ApiTags, ApiOperation, ApiResponse } from '@nestjs/swagger';
 import { ResponseDto } from 'src/dto/response.dto';
+import { UserDec } from 'src/user/user.decorator';
 import { DayRecordService } from './day-record.service';
 import { CreateDayRecordDto } from './dto/create-day-record.dto';
 import { UpdateDayRecordDto } from './dto/update-day-record.dto';
@@ -27,8 +28,11 @@ export class DayRecordController {
     type: ResponseDto<DayRecord>,
   })
   @Post()
-  async create(@Body() createDayRecordDto: CreateDayRecordDto) {
-    return this.dayRecordService.create(createDayRecordDto);
+  async create(
+    @UserDec('id') userId: number,
+    @Body() createDayRecordDto: CreateDayRecordDto,
+  ) {
+    return this.dayRecordService.create(userId, createDayRecordDto);
   }
 
   @ApiOperation({ summary: 'get all' })
@@ -38,8 +42,8 @@ export class DayRecordController {
     type: ResponseDto<DayRecord[]>,
   })
   @Get()
-  async findAll(@Query() query) {
-    return this.dayRecordService.findAll(query);
+  async findAll(@UserDec('id') userId: number, @Query() query) {
+    return this.dayRecordService.findAll(query, userId);
   }
 
   @Get(':id')

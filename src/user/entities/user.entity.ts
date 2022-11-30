@@ -49,22 +49,22 @@ export class User {
   @OneToMany(() => YearRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
-  yearRecord: YearRecord[];
+  yearRecords: YearRecord[];
 
   @OneToMany(() => MonthRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
-  monthRecord: MonthRecord[];
+  monthRecords: MonthRecord[];
 
   @OneToMany(() => WeekRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
-  weekRecord: WeekRecord[];
+  weekRecords: WeekRecord[];
 
   @OneToMany(() => DayRecord, (type) => type.user)
   @JoinColumn()
   @ApiProperty()
-  dayRecord: DayRecord[];
+  dayRecords: DayRecord[];
 
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()
