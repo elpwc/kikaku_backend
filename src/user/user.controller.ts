@@ -71,6 +71,7 @@ export class UserController {
   @Patch(':id')
   async update(
     @UserDec('id') id: string,
+    @Param('id') id_not_used: string,
     @Body() updateUserDto: UpdateUserDto,
   ) {
     return this.userService.update(+id, updateUserDto);
