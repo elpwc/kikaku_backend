@@ -60,7 +60,9 @@ export class AffairTypeService {
     );
 
     qb.where('1 = 1');
-    qb.andWhere('affairType.userId = :userId', { userId });
+    if (userId) {
+      qb.andWhere('affairType.userId = :userId', { userId });
+    }
 
     qb.orderBy('affairType.createtime', 'DESC');
 

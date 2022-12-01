@@ -49,7 +49,7 @@ export class WeekRecordService {
 
     qb.where('1 = 1');
     if (userId) {
-      qb.andWhere('affair.userId = :userId', { userId });
+      qb.andWhere('week_record.userId = :userId', { userId });
     }
 
     if ('year' in query) {

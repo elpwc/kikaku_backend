@@ -52,7 +52,7 @@ export class DayRecordService {
 
     qb.where('1 = 1');
     if (userId) {
-      qb.andWhere('affair.userId = :userId', { userId });
+      qb.andWhere('day_record.userId = :userId', { userId });
     }
 
     if ('year' in query) {

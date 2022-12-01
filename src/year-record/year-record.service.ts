@@ -81,8 +81,9 @@ export class YearRecordService {
     );
 
     qb.where('1 = 1');
-    qb.andWhere('affair.userId = :userId', { userId });
-
+    if (userId) {
+      qb.andWhere('year_record.userId = :userId', { userId });
+    }
     if ('year' in query) {
       qb.andWhere('year_record.year = :year', { year: query.year });
     }
