@@ -11,6 +11,7 @@ import { validate } from 'class-validator';
 import { SECRET } from 'src/config';
 import * as jwt from 'jsonwebtoken';
 import { UserRO } from './user.interface';
+import { RegisterDto } from './dto/register';
 
 @Injectable()
 export class UserService {
@@ -19,7 +20,7 @@ export class UserService {
     private readonly userRepository: Repository<User>,
   ) {}
 
-  async create(createUserDto: CreateUserDto) {
+  async create(createUserDto: RegisterDto) {
     // check uniqueness of username/email
     const { name, password } = createUserDto;
     const qb = await AppDataSource.getRepository(User).createQueryBuilder(
@@ -73,11 +74,11 @@ export class UserService {
   }
 
   async update(id: number, updateUserDto: UpdateUserDto) {
-    return `This action updates a #${id} user`;
+    return this.userRepository.update(id, updateUserDto);
   }
 
   async remove(id: number) {
-    return `This action removes a #${id} user`;
+    this.update(id, { deleted: true });
   }
 
   async findById(id: number): Promise<UserRO> {

@@ -66,6 +66,10 @@ export class User {
   @ApiProperty()
   dayRecords: DayRecord[];
 
+  @Column({ nullable: true })
+  @ApiProperty({ nullable: true })
+  deleted: boolean;
+
   @Column('datetime', { default: () => 'CURRENT_TIMESTAMP' })
   @ApiProperty()
   createtime: Date;

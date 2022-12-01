@@ -8,6 +8,7 @@ import {
   Delete,
   Query,
   HttpException,
+  ForbiddenException,
 } from '@nestjs/common';
 import { UserService } from './user.service';
 import { CreateUserDto } from './dto/create-user.dto';
@@ -22,6 +23,8 @@ import {
 import { ResponseDto } from 'src/dto/response.dto';
 import { LoginDto } from './dto/login.dto';
 import { UserDec } from './user.decorator';
+import { verifyRecaptcha } from 'src/utils/verifyRecaptcha';
+import { RegisterDto } from './dto/register';
 
 @Controller('user')
 @ApiExtraModels(ResponseDto)
@@ -36,8 +39,14 @@ export class UserController {
     type: ResponseDto<User>,
   })
   @Post()
-  async create(@Body() createUserDto: CreateUserDto) {
-    return this.userService.create(createUserDto);
+  async create(@Body() registerDto: RegisterDto) {
+    const recaptchaVerifiedRes = await verifyRecaptcha(registerDto.token);
+    console.log(recaptchaVerifiedRes);
+    if (recaptchaVerifiedRes) {
+      return this.userService.create(registerDto);
+    } else {
+      throw new ForbiddenException('reCAPTCHA not solved');
+    }
   }
 
   @Post('/login')
