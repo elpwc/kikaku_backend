@@ -57,6 +57,11 @@ async function bootstrap() {
       methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
       allowedHeaders: ['Content-Type'],
     }),
+    cors({
+      origin: 'https://www.elpwc.com/',
+      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+      allowedHeaders: ['Content-Type'],
+    }),
   );
 
   app.useGlobalInterceptors(new TransformInterceptor());
