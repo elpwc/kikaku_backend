@@ -1,5 +1,6 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
+import _ from 'lodash';
 import { Affair } from 'src/affair/entities/affair.entity';
 import { AppDataSource } from 'src/dataSource';
 import { User } from 'src/user/entities/user.entity';
@@ -127,7 +128,18 @@ export class YearRecordService {
   }
 
   async update(id: number, updateYearRecordDto: UpdateYearRecordDto) {
-    return this.yearRecordRepository.update(id, updateYearRecordDto);
+    const toUpdate = await this.yearRecordRepository.findOne({ where: { id } });
+    let updated = Object.assign(toUpdate, updateYearRecordDto);
+    if (updateYearRecordDto.affairId) {
+      const affair = await this.yearRecordRepository.findOne({
+        where: { id: updateYearRecordDto.affairId },
+      });
+      updated = Object.assign(updated, { affair });
+      delete updated.affairId;
+    }
+
+    const record = await this.yearRecordRepository.save(updated);
+    return { record };
   }
 
   async remove(id: number) {

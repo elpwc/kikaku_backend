@@ -52,16 +52,17 @@ async function bootstrap() {
   // app.use(helmet());
 
   app.use(
-    cors({
-      origin: 'http://localhost:3000',
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-      allowedHeaders: ['Content-Type'],
-    }),
-    cors({
-      origin: 'https://www.elpwc.com/',
-      methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
-      allowedHeaders: ['Content-Type'],
-    }),
+    INDEV
+      ? cors({
+          origin: 'http://localhost:3000',
+          methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+          allowedHeaders: ['Content-Type'],
+        })
+      : cors({
+          origin: 'https://www.elpwc.com/',
+          methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+          allowedHeaders: ['Content-Type'],
+        }),
   );
 
   app.useGlobalInterceptors(new TransformInterceptor());

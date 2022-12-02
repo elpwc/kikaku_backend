@@ -98,7 +98,20 @@ export class MonthRecordService {
   }
 
   async update(id: number, updateMonthRecordDto: UpdateMonthRecordDto) {
-    return this.monthRecordRepository.update(id, updateMonthRecordDto);
+    const toUpdate = await this.monthRecordRepository.findOne({
+      where: { id },
+    });
+    let updated = Object.assign(toUpdate, updateMonthRecordDto);
+    if (updateMonthRecordDto.affairId) {
+      const affair = await this.monthRecordRepository.findOne({
+        where: { id: updateMonthRecordDto.affairId },
+      });
+      updated = Object.assign(updated, { affair });
+      delete updated.affairId;
+    }
+
+    const record = await this.monthRecordRepository.save(updated);
+    return { record };
   }
 
   async remove(id: number) {

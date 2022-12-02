@@ -110,7 +110,20 @@ export class DayRecordService {
   }
 
   async update(id: number, updateDayRecordDto: UpdateDayRecordDto) {
-    return this.dayRecordRepository.update(id, updateDayRecordDto);
+    const toUpdate = await this.dayRecordRepository.findOne({
+      where: { id },
+    });
+    let updated = Object.assign(toUpdate, updateDayRecordDto);
+    if (updateDayRecordDto.affairId) {
+      const affair = await this.dayRecordRepository.findOne({
+        where: { id: updateDayRecordDto.affairId },
+      });
+      updated = Object.assign(updated, { affair });
+      delete updated.affairId;
+    }
+
+    const record = await this.dayRecordRepository.save(updated);
+    return { record };
   }
 
   async remove(id: number) {

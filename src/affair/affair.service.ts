@@ -1,4 +1,4 @@
-import { Injectable, HttpStatus, NotFoundException } from '@nestjs/common';
+import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
 import { AffairType } from 'src/affair-type/entities/affair-type.entity';
 import { AppDataSource } from 'src/dataSource';
@@ -7,6 +7,7 @@ import { Repository } from 'typeorm';
 import { CreateAffairDto } from './dto/create-affair.dto';
 import { UpdateAffairDto } from './dto/update-affair.dto';
 import { Affair } from './entities/affair.entity';
+import _ from 'lodash';
 
 @Injectable()
 export class AffairService {
@@ -98,7 +99,18 @@ export class AffairService {
   }
 
   async update(id: number, updateAffairDto: UpdateAffairDto) {
-    return this.affairRepository.update(id, updateAffairDto);
+    const toUpdate = await this.affairRepository.findOne({ where: { id } });
+    let updated = Object.assign(toUpdate, updateAffairDto);
+    if (updateAffairDto.typeId) {
+      const type = await this.affairTypeRepository.findOne({
+        where: { id: updateAffairDto.typeId },
+      });
+      updated = Object.assign(updated, { type });
+      delete updated.typeId;
+    }
+
+    const affair = await this.affairRepository.save(updated);
+    return { affair };
   }
 
   async remove(id: number) {

@@ -103,7 +103,18 @@ export class WeekRecordService {
   }
 
   async update(id: number, updateWeekRecordDto: UpdateWeekRecordDto) {
-    return this.weekRecordRepository.update(id, updateWeekRecordDto);
+    const toUpdate = await this.weekRecordRepository.findOne({ where: { id } });
+    let updated = Object.assign(toUpdate, updateWeekRecordDto);
+    if (updateWeekRecordDto.affairId) {
+      const affair = await this.weekRecordRepository.findOne({
+        where: { id: updateWeekRecordDto.affairId },
+      });
+      updated = Object.assign(updated, { affair });
+      delete updated.affairId;
+    }
+
+    const record = await this.weekRecordRepository.save(updated);
+    return { record };
   }
 
   async remove(id: number) {
