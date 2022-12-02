@@ -84,8 +84,6 @@ export class WeekRecordService {
       .leftJoinAndSelect('week_record.affair', 'affair')
       .getMany();
 
-    console.log(records);
-
     return { records, count };
   }
 
@@ -94,7 +92,6 @@ export class WeekRecordService {
       where: { id },
       relations: ['affair'],
     });
-    console.log(res);
     if (res === null) {
       throw new NotFoundException('Cannot find');
     } else {

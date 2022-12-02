@@ -41,7 +41,6 @@ export class UserController {
   @Post()
   async create(@Body() registerDto: RegisterDto) {
     const recaptchaVerifiedRes = await verifyRecaptcha(registerDto.token);
-    console.log(recaptchaVerifiedRes);
     if (recaptchaVerifiedRes) {
       return this.userService.create(registerDto);
     } else {

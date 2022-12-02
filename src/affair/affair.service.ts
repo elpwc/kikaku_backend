@@ -7,7 +7,6 @@ import { Repository } from 'typeorm';
 import { CreateAffairDto } from './dto/create-affair.dto';
 import { UpdateAffairDto } from './dto/update-affair.dto';
 import { Affair } from './entities/affair.entity';
-import _ from 'lodash';
 
 @Injectable()
 export class AffairService {
@@ -80,8 +79,6 @@ export class AffairService {
 
     const affairs = await qb.leftJoinAndSelect('affair.type', 'type').getMany();
 
-    console.log(affairs);
-
     return { affairs, count };
   }
 
@@ -90,7 +87,6 @@ export class AffairService {
       where: { id },
       relations: ['type'],
     });
-    console.log(res);
     if (res === null) {
       throw new NotFoundException('Cannot find');
     } else {

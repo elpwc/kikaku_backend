@@ -1,6 +1,5 @@
 import { Injectable, NotFoundException } from '@nestjs/common';
 import { InjectRepository } from '@nestjs/typeorm';
-import _ from 'lodash';
 import { Affair } from 'src/affair/entities/affair.entity';
 import { AppDataSource } from 'src/dataSource';
 import { User } from 'src/user/entities/user.entity';
@@ -31,7 +30,7 @@ export class YearRecordService {
 
     const user = await this.userRepository.findOne({
       where: { id: userId },
-      relations: ['affairs'],
+      relations: ['yearRecords'],
     });
     user.yearRecords.push(yearRecord);
 
@@ -71,8 +70,6 @@ export class YearRecordService {
       .leftJoinAndSelect('year_record.affair', 'affair')
       .getMany();
 
-    console.log(yearRecords);
-
     return { yearRecords, count };
   }
 
@@ -109,8 +106,6 @@ export class YearRecordService {
       .leftJoinAndSelect('year_record.affair', 'affair')
       .getMany();
 
-    console.log(yearRecords);
-
     return { yearRecords, count };
   }
 
@@ -119,7 +114,6 @@ export class YearRecordService {
       where: { id },
       relations: ['affair'],
     });
-    console.log(res);
     if (res === null) {
       throw new NotFoundException('Cannot find');
     } else {

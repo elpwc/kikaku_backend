@@ -79,8 +79,6 @@ export class MonthRecordService {
       .leftJoinAndSelect('month_record.affair', 'affair')
       .getMany();
 
-    console.log(records);
-
     return { records, count };
   }
 
@@ -89,7 +87,6 @@ export class MonthRecordService {
       where: { id },
       relations: ['affair'],
     });
-    console.log(res);
     if (res === null) {
       throw new NotFoundException('Cannot find');
     } else {
