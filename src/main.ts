@@ -10,6 +10,7 @@ import * as cors from 'cors';
 import { Logger } from '@nestjs/common';
 import { TransformInterceptor } from './interceptor/transform.interceptor';
 import { HttpExceptionFilter } from './filters/http-exception.filter';
+import { INDEV } from './config';
 
 const PORT = 3006;
 
@@ -47,7 +48,7 @@ async function bootstrap() {
 
   // swagger stop
 
-  app.setGlobalPrefix('api/v1');
+  app.setGlobalPrefix(INDEV ? 'api/v1' : 'server/kikaku/api/v1');
   // app.use(helmet());
 
   app.use(
